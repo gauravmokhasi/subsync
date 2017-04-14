@@ -11,25 +11,25 @@ def syncSubs(c):
     eg. [['0', '44', '32,513'], ['-->'], ['0', '44', '33,570']]
     """
     for ele in c:
-            if ele == ['-->']:
-                    continue
-            else:
-                    scount = int(ele[2].split(",")[0])
-                    mscount = int(ele[2].split(",")[1])
-                    mscount+=ms
-                    scount+=mscount/1000 + s
-                    mscount%=1000
-                    if mscount:
-                            while mscount < 100:
-                                    mscount*=10
-                    m = scount/60
-                    scount%=60
-                    ele[2]=str(scount)+","+str(mscount)
-                    mcount = int(ele[1]) + m
-                    hcount = int(ele[0]) + mcount/60
-                    mcount%=60
-                    ele[1]=str(mcount)
-                    ele[0]=str(hcount)
+        if ele == ['-->']:
+            continue
+        else:
+            scount = int(ele[2].split(",")[0])
+            mscount = int(ele[2].split(",")[1])
+            mscount+=ms
+            scount+=mscount/1000 + s
+            mscount%=1000
+            if mscount:
+                while mscount < 100:
+                    mscount*=10
+                m = scount/60
+                scount%=60
+                ele[2]=str(scount)+","+str(mscount)
+                mcount = int(ele[1]) + m
+                hcount = int(ele[0]) + mcount/60
+                mcount%=60
+                ele[1]=str(mcount)
+                ele[0]=str(hcount)
 
 req_file = raw_input("Enter filename without extension: ")+".srt"
 
@@ -46,7 +46,7 @@ f_new= open(req_file, 'w') # output file
 for line in x:
     line1=line
     temp1 = ""
-    if line[0]=='0': # line indicating time assumed to start with 0 as videos > 9hrs are rare
+    if "-->" in line: # assuming "-->" will not appear in dialogue
         b = line.split()
         # b = ['h1:m1:s1,ms1', '-->', 'h2:m2:s2,ms2']
         # eg. ['0:44:0,382', '-->', '0:44:1,334']
