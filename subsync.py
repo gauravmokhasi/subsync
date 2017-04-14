@@ -1,7 +1,6 @@
 """
 @author = gauravmokhasi
 This is a program to help sync a video and its respective .srt file
-It works when there is a fixed delay throughout the video
 The user is required to enter file name and value of the delay required in ms
 """
 def syncSubs(c):
@@ -33,6 +32,13 @@ def syncSubs(c):
 
 req_file = raw_input("Enter filename without extension: ")+".srt"
 
+option = int(raw_input("Enter \n* 0 to fix delay for whole file.\n* 1 to fix delay from a particular subtitle block: "))
+
+if option == 1:
+    sub_block = int(raw_input("Enter the number of the subtitle block after which you want to fix delay: "))
+else:
+    sub_block = 1 # if you want to change full file, you have to change it from sub_block
+
 delay = int(raw_input("Enter Subtitle delay in ms: "))
 #splitting delay into seconds and milliseconds
 s= delay/1000
@@ -43,7 +49,15 @@ x=f_old.readlines()
 
 f_new= open(req_file, 'w') # output file
 
+sub_count = 1 # start from block 1
+
 for line in x:
+    if sub_count < sub_block:
+        if line.strip().isdigit():
+            sub_count+=1
+        f_new.write(line)
+        continue # keep the file same till the block from which you want to change delay comes
+
     line1=line
     temp1 = ""
     if "-->" in line: # assuming "-->" will not appear in dialogue
@@ -53,6 +67,7 @@ for line in x:
         c = []
         for val in b:
             c.append(val.split(':'))
+
         syncSubs(c) # calling function that fixes subtitle delay
         for val in c:
             x = ""
